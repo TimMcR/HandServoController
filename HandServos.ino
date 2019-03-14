@@ -1,9 +1,4 @@
 #include <Servo.h>
-/*
-#include <SPI.h>
-#include <nRF24L01.h>
-#include <RF24.h>
-*/
 
 Servo indexFinger;
 Servo middleFinger;
@@ -11,14 +6,13 @@ Servo ringFinger;
 Servo pinkyFinger;
 //Servo thumb;
 
-//RF24 radio(7, 8); // CE, CSN
-//const byte addresses[][6] = {"00001", "00002"};
-
 int indexMin = 104, indexMax = 180;
 int middleMin = 0, middleMax = 67;
 int ringMin = 115, ringMax = 178;
 int pinkyMin = 125, pinkyMax = 175;
 int thumbMin = 90, thumbMax = 180;
+
+//Limits for fingers:
 
 //Index finger 180-104
 //Middle finger 0-67
@@ -170,12 +164,6 @@ void gotEm()
   indexClose();
 }
 
-void bigBird()
-{
-  closeHand();
-  middleOpen();
-}
-
 void rockOn()
 {
   closeHand();
@@ -203,12 +191,6 @@ void setOpen()
   pinkyFinger.write(pinkyMax);
   delay(moveDelay * 4);
 }
-
-int potpin = 0;
-int val;
-
-boolean buttonState = 0;
-int button = 9;
 
 int angles[] = {0, 0, 0, 0, 0};
 Servo fingers[] = {indexFinger, middleFinger, ringFinger, pinkyFinger};
@@ -243,18 +225,6 @@ void trial()
   pinkyOpen();
   delay(500);
 }
-/*
-void sendFinger(int f)
-{
-  radio.stopListening();
-  radio.write(&f, sizeof(f));
-}
-
-void writeFinger(int f, int a)
-{
-  fingers[f].write(a);
-}
-*/
 
 int i = 0;
 int maxFinger = 4;
@@ -265,29 +235,11 @@ void setup() {
   ringFinger.attach(4);
   pinkyFinger.attach(5);
   //thumb.attach(6);
-  //Serial.begin(9600);
-  /*
-  radio.begin();
-  radio.openWritingPipe(addresses[0]); // 00002
-  radio.openReadingPipe(1, addresses[1]); // 00001
-  radio.setPALevel(RF24_PA_MAX);
-  */
+  
   setOpen();
-  //setClose();
 }
 
 void loop() 
 { 
-  /*
-  delay(5);
-  sendFinger(i);
-  radio.startListening();
-  while(!radio.available());
-  int angle = 0;
-  radio.read(&angle, sizeof(angle));
-  writeFinger(i, angle);
-  i = (i > maxFinger ? 0 : i + 1);
-  */
-
   trial();
 }

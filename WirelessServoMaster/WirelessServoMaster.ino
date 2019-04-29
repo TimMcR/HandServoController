@@ -44,10 +44,11 @@ void readSensors()
 void loop() { 
   delay(5);
   radio.startListening();
-  while(!radio.available());
+  //while(!radio.available());
   readSensors();
   int f = 0;
   radio.read(&f, sizeof(f));
   radio.stopListening();
   radio.write(&angles[f], sizeof(angles[f]));
+  //Serial.println(angles[0]);
 }

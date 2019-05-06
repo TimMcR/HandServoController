@@ -3,35 +3,34 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 
+/*
+ * This is the code for controlling the animatronic hand
+ * Right now it runs automatically with prewritten code, however there is some code that can allow you to control it with a seperate Arduino over radio
+ */
+
+//These are the servo objects, right now the thumb is commented out because it hasn't been working properly
 Servo indexFinger;
 Servo middleFinger;
 Servo ringFinger;
 Servo pinkyFinger;
 //Servo thumb;
 
-Servo fingers[] = {indexFinger, middleFinger, ringFinger, pinkyFinger};
+//Servo fingers[] = {indexFinger, middleFinger, ringFinger, pinkyFinger};
 
 //RF24 radio(7, 8);
 //const byte addresses[][6] = {"00001", "00002"};
 
+//These are the limits for each servo, I found them out by using a potentiometer, however they may need to be updated
 int indexMin = 104, indexMax = 180;
 int middleMin = 0, middleMax = 67;
 int ringMin = 115, ringMax = 178;
 int pinkyMin = 125, pinkyMax = 175;
 int thumbMin = 90, thumbMax = 180;
 
-//Limits for fingers:
+//This is the standard delay time between each finger movemend
+int moveDelay = 20;
 
-//Index finger 180-104
-//Middle finger 0-67
-//Ring finger 115-178
-//Pinky finger 125-175
-//Thumb 90-180
-
-boolean indexClosed = true, middleClosed = true, ringClosed = true, pinkyClosed = true;
-
-int moveDelay = 4;
-
+//These are the methods to open and close each finger
 void indexOpen()
 {
   indexFinger.write(indexMax);
@@ -92,6 +91,8 @@ void thumbClose()
   delay(moveDelay * 3);
 }
 */
+
+//These methods combine multiple other methods in order to form a specific hand position
 void closeHand()
 {
   //thumbClose();
@@ -100,7 +101,6 @@ void closeHand()
   middleClose();
   indexClose();
 }
-
 void openHand()
 {
   pinkyOpen();
@@ -109,20 +109,17 @@ void openHand()
   indexOpen();
   //thumbOpen();
 }
-
 void gotEm()
 {
   openHand();
   indexClose();
 }
-
 void rockOn()
 {
   closeHand();
   pinkyOpen();
   indexOpen();
 }
-
 void wave()
 {
   pinkyClose();
@@ -134,13 +131,13 @@ void wave()
   middleOpen();
   indexOpen();
 }
-
 void setOpen()
 {
   openHand();
   delay(moveDelay * 4);
 }
 
+//This is our standard procedure for events and for testing
 void trial()
 {
   openHand();
@@ -171,9 +168,6 @@ void trial()
   pinkyOpen();
   delay(500);
 }
-
-int i = 0;
-int maxFinger = 4;
 
 void setup() 
 {

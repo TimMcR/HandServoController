@@ -31,24 +31,19 @@ int myMap(int x, int inMin, int inMax, int outMin, int outMax)
 void readSensors()
 {
   values[0] = analogRead(A0);
-  values[1] = analogRead(A1);
-  values[2] = analogRead(A2);
-  values[3] = analogRead(A3);
-  values[4] = analogRead(A4);
   for(int i = 0; i < 5; i++)
   {
-    angles[i] = myMap(values[i], flexMin, flexMax, maxes[i], mins[i]);
+    angles[i] = myMap(values[0], flexMin, flexMax, maxes[i], mins[i]);
   }
 }
 
 void loop() { 
   delay(5);
-  radio.startListening();
-  //while(!radio.available());
-  readSensors();
-  int f = 0;
-  radio.read(&f, sizeof(f));
   radio.stopListening();
-  radio.write(&angles[f], sizeof(angles[f]));
-  //Serial.println(angles[0]);
+  readSensors();
+  for(int i = 0; i < 4; i++)
+  {
+    radio.write(&angles[i], sizeof(angles[i]));
+    Serial.println(angles[i]);
+  }  
 }

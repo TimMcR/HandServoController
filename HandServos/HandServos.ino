@@ -15,10 +15,11 @@ Servo ringFinger;
 Servo pinkyFinger;
 //Servo thumb;
 
-//Servo fingers[] = {indexFinger, middleFinger, ringFinger, pinkyFinger};
+//This is the radio, which we use to communicate with another Arduino
+RF24 radio(7, 8);
+const byte addresses[][6] = {"00001", "00002"};
 
-//RF24 radio(7, 8);
-//const byte addresses[][6] = {"00001", "00002"};
+#define LED 9
 
 //These are the limits for each servo, I found them out by using a potentiometer, however they may need to be updated
 int indexMin = 104, indexMax = 180;
@@ -177,17 +178,27 @@ void setup()
   pinkyFinger.attach(5);
   //thumb.attach(6);
 
-  /*
+  
   radio.begin();
   radio.openWritingPipe(addresses[0]); // 00002
   radio.openReadingPipe(1, addresses[1]); // 00001
   radio.setPALevel(RF24_PA_MAX);
-  */
+  
+  pinMode(LED, OUTPUT);
   
   setOpen();
 }
 
 void loop()
 {
+  if(radio.available())
+  {
+     digitalWrite(LED, LOW);
+  }
+  else
+  {
+    digitalWrite(LED, LOW);
+  }
+    
   trial();
 }

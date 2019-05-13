@@ -19,7 +19,7 @@ Servo pinkyFinger;
 RF24 radio(7, 8);
 const byte addresses[][6] = {"00001", "00002"};
 
-#define LED 9
+#define led 9
 
 //These are the limits for each servo, I found them out by using a potentiometer, however they may need to be updated
 int indexMin = 104, indexMax = 180;
@@ -29,67 +29,124 @@ int pinkyMin = 125, pinkyMax = 175;
 int thumbMin = 90, thumbMax = 180;
 
 //This is the standard delay time between each finger movemend
-int moveDelay = 20;
+int moveDelay = 4;
+
+boolean indexClosed = true, middleClosed = true, ringClosed = true, pinkyClosed = true;
 
 //These are the methods to open and close each finger
 void indexOpen()
 {
-  indexFinger.write(indexMax);
-  delay(moveDelay * 3);
+  if(indexClosed)
+  {
+    for(int i = indexMin; i <= indexMax; i++)
+    {
+      indexFinger.write(i);
+      delay(moveDelay);
+    }
+    indexClosed = false;
+  }
 }
 
 void indexClose()
 {
-  indexFinger.write(indexMin);
-  delay(moveDelay * 3);
+  if(!indexClosed)
+  {
+    for(int i = indexMax; i >= indexMin; i--)
+    {
+      indexFinger.write(i);
+      delay(moveDelay);
+    }
+    indexClosed = true;
+  }
 }
 
 void middleClose()
 {
-  middleFinger.write(middleMax);
-  delay(moveDelay * 3);
+  if(!middleClosed)
+  {
+    for(int i = middleMin; i <= middleMax; i++)
+    {
+      middleFinger.write(i);
+      delay(moveDelay);
+    }
+    middleClosed = true;
+  }
 }
 
 void middleOpen()
 {
-  middleFinger.write(middleMin);
-  delay(moveDelay * 3);
+  if(middleClosed)
+  {
+    for(int i = middleMax; i >= middleMin; i--)
+    {
+      middleFinger.write(i);
+      delay(moveDelay);
+    }
+    middleClosed = false;
+  }
 }
 
 void ringOpen()
 {
-  ringFinger.write(ringMax);
-  delay(moveDelay * 3);
+  if(ringClosed)
+  {
+    for(int i = ringMin; i <= ringMax; i++)
+    {
+      ringFinger.write(i);
+      delay(moveDelay);
+    }
+    ringClosed = false;
+  }
 }
 
 void ringClose()
 {
-  ringFinger.write(ringMin);
-  delay(moveDelay * 3);
+  if(!ringClosed)
+  {
+    for(int i = ringMax; i >= ringMin; i--)
+    {
+      ringFinger.write(i);
+      delay(moveDelay);
+    }
+    ringClosed = true;
+  }
 }
 
 void pinkyOpen()
 {
-  pinkyFinger.write(pinkyMax);
-  delay(moveDelay * 3);
+  if(pinkyClosed)
+  {
+    for(int i = pinkyMin; i <= pinkyMax; i++)
+    {
+      pinkyFinger.write(i);
+      delay(moveDelay);
+    }
+    pinkyClosed = false;
+  }
 }
 
 void pinkyClose()
 {
-  pinkyFinger.write(pinkyMin);
-  delay(moveDelay * 3);
+  if(!pinkyClosed)
+  {
+    for(int i = pinkyMax; i >= pinkyMin; i--)
+    {
+      pinkyFinger.write(i);
+      delay(moveDelay);
+    }
+    pinkyClosed = true;
+  }
 }
 /*
 void thumbOpen()
 {
   thumb.write(thumbMax);
-  delay(moveDelay * 3);
+  delay(moveDelay * 4);
 }
-
 void thumbClose()
 {
   thumb.write(thumbMax);
-  delay(moveDelay * 3);
+  delay(moveDelay * 4);
 }
 */
 
@@ -178,27 +235,31 @@ void setup()
   pinkyFinger.attach(5);
   //thumb.attach(6);
 
-  
+  /*
   radio.begin();
   radio.openWritingPipe(addresses[0]); // 00002
   radio.openReadingPipe(1, addresses[1]); // 00001
   radio.setPALevel(RF24_PA_MAX);
-  
-  pinMode(LED, OUTPUT);
+  */
+  pinMode(led, OUTPUT);
   
   setOpen();
 }
 
 void loop()
 {
+  /*
   if(radio.available())
   {
-     digitalWrite(LED, LOW);
+     digitalWrite(led, LOW);
   }
   else
   {
-    digitalWrite(LED, LOW);
+    digitalWrite(led, LOW);
   }
-    
+  */
+  digitalWrite(led, HIGH);
   trial();
+  digitalWrite(led, LOW);
+  delay(500);
 }
